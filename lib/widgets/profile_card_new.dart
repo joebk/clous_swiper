@@ -1,9 +1,9 @@
-import 'package:dating_app/model/profile.dart';
+import 'package:dating_app/model/post.dart';
 import 'package:flutter/material.dart';
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({Key? key, required this.profile}) : super(key: key);
-  final Profile profile;
+class PostCard extends StatelessWidget {
+  const PostCard({Key? key, required this.post}) : super(key: key);
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class ProfileCard extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.asset(
-                profile.imageAsset,
+                post.imageAsset,
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -28,7 +28,7 @@ class ProfileCard extends StatelessWidget {
               height: 200,
               width: 340,
               decoration: ShapeDecoration(
-                color: Colors.white,
+                color: Colors.white.withOpacity(0.90),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -46,7 +46,7 @@ class ProfileCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      profile.name,
+                      post.name,
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
@@ -54,7 +54,7 @@ class ProfileCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      profile.pris,
+                      post.pris,
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
@@ -63,7 +63,25 @@ class ProfileCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      profile.test,
+                      post.m2,
+                      style: const TextStyle(
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      post.m2,
+                      style: const TextStyle(
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    Text(
+                      post.m2,
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,

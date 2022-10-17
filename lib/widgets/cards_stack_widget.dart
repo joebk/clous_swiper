@@ -1,27 +1,8 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:dating_app/main.dart';
 import 'package:dating_app/model/profile.dart';
-import 'package:dating_app/model/album.dart';
-import 'package:dating_app/model/user.dart';
 import 'package:dating_app/widgets/action_button_widget.dart';
 import 'package:dating_app/widgets/drag_widget.dart';
 import 'package:flutter/material.dart';
-
-Future<Album> fetchAlbum() async {
-  final response = await http
-      .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Album.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
 
 class CardsStackWidget extends StatefulWidget {
   const CardsStackWidget({Key? key}) : super(key: key);
@@ -34,7 +15,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
     with SingleTickerProviderStateMixin {
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
-  late List<Album> futureAlbum;
+
   List<Profile> draggableItems = [
     const Profile(
         name: 'Vendersgade 31B',
@@ -66,9 +47,7 @@ class _CardsStackWidgetState extends State<CardsStackWidget>
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
-    List<Profile> draggableItems2 = [];
-    print(draggableItems2);
+
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
