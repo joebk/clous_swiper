@@ -2,22 +2,27 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dating_app/main.dart';
-import 'package:dating_app/model/post.dart';
+import 'package:dating_app/model/house.dart';
 import 'package:dating_app/widgets/action_button_widget.dart';
 import 'package:dating_app/widgets/drag_widget_new.dart';
 import 'package:flutter/material.dart';
 
-Future<List<Post>> fetchPost() async {
-  final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+Future<List<House>> fetchHouses() async {
 
-  if (response.statusCode == 200) {
-    final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-
-    return parsed.map<Post>((json) => Post.fromMap(json)).toList();
-  } else {
-    throw Exception('Failed to load album');
-  }
+  var headers = {
+        'accept': '*/*',
+        'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
+        "cache-control": "no-cache",
+        "pragma": "no-cache",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "cross-site",
+        "Accept": "application/json"
+      };
+  var response = await http.get(Uri.parse("https://api.prod.bs-aws-stage.com/search/cases?cities=Frederiksberg+C&addressTypes=villa%2Ccondo%2Cterraced+house%2Choliday+house%2Ccooperative%2Cfarm%2Chobby+farm%2Cfull+year+plot%2Cvilla+apartment%2Choliday+plot&per_page=50&page=1&sortAscending=true&sortBy=timeOnMarket"), headers: headers);
+  return (json.decode(response.body)['cases'] as List)
+      .map((e) => House.fromJson(e))
+      .toList();
 }
 
 class FetchApp extends StatefulWidget {
@@ -32,12 +37,12 @@ class _FetchAppState extends State<FetchApp>
   ValueNotifier<Swipe> swipeNotifier = ValueNotifier(Swipe.none);
   late final AnimationController _animationController;
 
-  late Future<List<Post>> futurePost;
+  late Future<List<House>> futureHouse;
 
   @override
   void initState() {
     super.initState();
-    futurePost = fetchPost();
+    futureHouse = fetchHouses();
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -53,8 +58,8 @@ class _FetchAppState extends State<FetchApp>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Post>>(
-          future: futurePost,
+    return FutureBuilder<List<House>>(
+          future: futureHouse,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return Stack(
@@ -105,7 +110,7 @@ class _FetchAppState extends State<FetchApp>
                                   ),
                                 ),
                                 child: DragWidget(
-                                  post: snapshot.data![index],
+                                  house: snapshot.data![index],
                                   index: index,
                                   swipeNotifier: swipeNotifier,
                                   isLastCard: true,
@@ -114,7 +119,7 @@ class _FetchAppState extends State<FetchApp>
                             );
                           } else {
                             return DragWidget(
-                              post: snapshot.data![index],
+                              house: snapshot.data![index],
                               index: index,
                               swipeNotifier: swipeNotifier,
                             );

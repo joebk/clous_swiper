@@ -3,13 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:dating_app/widgets/background_curve_widget.dart';
 import 'package:dating_app/model/post.dart';
-import 'package:dating_app/widgets/cards_stack_widget.dart';
 import 'package:dating_app/widgets/fetch_app.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp2());
 
-
+//export PATH=~/Documents/flutter/bin:$PATH
 
 Future<List<Post>> fetchPost() async {
   final response =
@@ -35,7 +34,6 @@ class MyApp2 extends StatelessWidget {
         body: Stack(
           children: const [
             BackgroudCurveWidget(),
-            //CardsStackWidget(),
             FetchApp(),
           ],
         ),

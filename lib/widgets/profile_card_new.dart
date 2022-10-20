@@ -1,10 +1,13 @@
-import 'package:dating_app/model/post.dart';
+import 'package:dating_app/model/house.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class PostCard extends StatelessWidget {
-  const PostCard({Key? key, required this.post}) : super(key: key);
-  final Post post;
+final priceFormat = new NumberFormat.currency(locale: "da_DA", symbol: "");
 
+class HouseCard extends StatelessWidget {
+  const HouseCard({Key? key, required this.house}) : super(key: key);
+  final House house;
+    
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,8 +19,8 @@ class PostCard extends StatelessWidget {
           Positioned.fill(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                post.imageAsset,
+              child: Image.network(
+                house.imageAsset,
                 fit: BoxFit.fitHeight,
               ),
             ),
@@ -46,7 +49,7 @@ class PostCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      post.name,
+                      house.name.toString(),
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
@@ -54,8 +57,8 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      post.pris,
-                      style: const TextStyle(
+                        '${priceFormat.format(int.parse(house.pris.toString()))}DKK',
+                        style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
@@ -63,7 +66,7 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      post.m2,
+                      '${house.m2.toString()} m2',
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
@@ -72,7 +75,7 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      post.m2,
+                      '${house.daysOnMarket.toString()} dage - liggetid',
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
@@ -81,7 +84,8 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      post.m2,
+                      
+                      '${house.numberOfRooms.toString()} rum',
                       style: const TextStyle(
                         fontFamily: 'Nunito',
                         fontWeight: FontWeight.w800,
