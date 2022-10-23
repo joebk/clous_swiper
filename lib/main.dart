@@ -1,44 +1,32 @@
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:dating_app/widgets/background_curve_widget.dart';
-import 'package:dating_app/model/post.dart';
-import 'package:dating_app/widgets/fetch_app.dart';
+import 'package:dating_app/widgets/card_stack_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(const MyApp2());
+const mainColor = Color(0xFF141466);
+const secondColor = Color(0xFF2929CC);
+const thirdColor = Color(0xFF6677CC);
+const fourthColor = Color(0xFFDADAE6);
+
+void main() {
+  runApp(MyApp());
+}
 
 //export PATH=~/Documents/flutter/bin:$PATH
 
-Future<List<Post>> fetchPost() async {
-  final response =
-      await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
-
-  if (response.statusCode == 200) {
-    final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
-
-    return parsed.map<Post>((json) => Post.fromMap(json)).toList();
-  } else {
-    throw Exception('Failed to load album');
-  }
-}
-
-
-class MyApp2 extends StatelessWidget {
-  const MyApp2({Key? key}) : super(key: key);
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-        body: Stack(
-          children: const [
-            BackgroudCurveWidget(),
-            FetchApp(),
-          ],
-        ),
-      ),
-    );
+        title: 'Bolig app',
+        home: Scaffold(
+            backgroundColor: Colors.white,
+            body: PageView(
+              controller: PageController(),
+              scrollDirection: Axis.vertical,
+              //pageSnapping: false,
+              children: const <Widget>[BackgroundCurveWidget(), FetchApp()],
+            )));
   }
 }
 

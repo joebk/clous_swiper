@@ -17,6 +17,7 @@ class HouseCard extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
+            bottom: 0,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(

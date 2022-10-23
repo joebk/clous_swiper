@@ -1,6 +1,6 @@
 import 'package:dating_app/main.dart';
 import 'package:dating_app/model/house.dart';
-import 'package:dating_app/widgets/profile_card_new.dart';
+import 'package:dating_app/widgets/profile_card.dart';
 import 'package:dating_app/widgets/tag_widget.dart';
 import 'package:flutter/material.dart';
 
