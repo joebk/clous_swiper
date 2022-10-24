@@ -1,7 +1,5 @@
-import 'package:dating_app/widgets/background_curve_widget.dart';
-import 'package:dating_app/widgets/card_stack_widget.dart';
+import 'package:dating_app/widgets/home_page_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 const mainColor = Color(0xFF141466);
 const secondColor = Color(0xFF2929CC);
@@ -19,14 +17,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Bolig app',
-        home: Scaffold(
-            backgroundColor: Colors.white,
-            body: PageView(
-              controller: PageController(),
-              scrollDirection: Axis.vertical,
-              //pageSnapping: false,
-              children: const <Widget>[BackgroundCurveWidget(), FetchApp()],
-            )));
+        theme: ThemeData(
+          canvasColor: Colors.transparent,
+        ),
+        home: const HomePage());
   }
 }
 

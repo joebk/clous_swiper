@@ -7,11 +7,41 @@ import 'package:dating_app/widgets/action_button_widget.dart';
 import 'package:dating_app/widgets/drag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/services/appdata.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const mainColor = Color(0xFF141466);
 const secondColor = Color(0xFF2929CC);
 const thirdColor = Color(0xFF6677CC);
 const fourthColor = Color(0xFFDADAE6);
+
+//  Text('Gemt til favoritter',
+//      style: TextStyle(
+//          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+
+final snackBar = SnackBar(
+  content: Row(
+    mainAxisSize: MainAxisSize.min,
+    // ignore: prefer_const_literals_to_create_immutables
+    children: [
+      const Text('Gemt til favoritter',
+          style: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+      const Icon(Icons.favorite, color: Colors.red, size: 20),
+    ],
+  ),
+  duration: const Duration(seconds: 2),
+  backgroundColor: mainColor,
+);
+
+_launchURL(url) async {
+  // ignore: deprecated_member_use
+  if (await canLaunch(url)) {
+    // ignore: deprecated_member_use
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 Future<List<House>> fetchHouses() async {
   var headers = {
@@ -77,7 +107,7 @@ class _FetchAppState extends State<FetchApp>
           return Column(
             children: [
               Container(
-                height: 150,
+                height: 100,
                 width: double.infinity,
                 decoration: const BoxDecoration(
                     color: mainColor,
@@ -87,7 +117,7 @@ class _FetchAppState extends State<FetchApp>
                     )),
                 child: const SafeArea(
                   child: Padding(
-                      padding: EdgeInsets.only(top: 25, left: 25),
+                      padding: EdgeInsets.only(left: 25),
                       child: Text('Vælg nye filtre',
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
@@ -103,72 +133,75 @@ class _FetchAppState extends State<FetchApp>
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: ValueListenableBuilder(
-                            valueListenable: swipeNotifier,
-                            builder: (context, swipe, _) => Stack(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              children:
-                                  List.generate(snapshot.data!.length, (index) {
-                                if (index == snapshot.data!.length - 1) {
-                                  return PositionedTransition(
-                                    rect: RelativeRectTween(
-                                      begin: RelativeRect.fromSize(
-                                          const Rect.fromLTWH(0, 0, 580, 340),
-                                          const Size(580, 340)),
-                                      end: RelativeRect.fromSize(
-                                          Rect.fromLTWH(
-                                              swipe != Swipe.none
-                                                  ? swipe == Swipe.left
-                                                      ? -300
-                                                      : 300
-                                                  : 0,
-                                              0,
-                                              580,
-                                              340),
-                                          const Size(580, 340)),
-                                    ).animate(CurvedAnimation(
-                                      parent: _animationController,
-                                      curve: Curves.easeInOut,
-                                    )),
-                                    child: RotationTransition(
-                                      turns: Tween<double>(
-                                              begin: 0,
-                                              end: swipe != Swipe.none
-                                                  ? swipe == Swipe.left
-                                                      ? -0.1 * 0.3
-                                                      : 0.1 * 0.3
-                                                  : 0.0)
-                                          .animate(
-                                        CurvedAnimation(
-                                          parent: _animationController,
-                                          curve: const Interval(0, 0.4,
-                                              curve: Curves.easeInOut),
+                        Container(
+                          color: Colors.white,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: ValueListenableBuilder(
+                              valueListenable: swipeNotifier,
+                              builder: (context, swipe, _) => Stack(
+                                clipBehavior: Clip.none,
+                                //alignment: Alignment.center,
+                                children: List.generate(snapshot.data!.length,
+                                    (index) {
+                                  if (index == snapshot.data!.length - 1) {
+                                    return PositionedTransition(
+                                      rect: RelativeRectTween(
+                                        begin: RelativeRect.fromSize(
+                                            const Rect.fromLTWH(0, 0, 580, 340),
+                                            const Size(580, 340)),
+                                        end: RelativeRect.fromSize(
+                                            Rect.fromLTWH(
+                                                swipe != Swipe.none
+                                                    ? swipe == Swipe.left
+                                                        ? -300
+                                                        : 300
+                                                    : 0,
+                                                0,
+                                                580,
+                                                340),
+                                            const Size(580, 340)),
+                                      ).animate(CurvedAnimation(
+                                        parent: _animationController,
+                                        curve: Curves.easeInOut,
+                                      )),
+                                      child: RotationTransition(
+                                        turns: Tween<double>(
+                                                begin: 0,
+                                                end: swipe != Swipe.none
+                                                    ? swipe == Swipe.left
+                                                        ? -0.1 * 0.3
+                                                        : 0.1 * 0.3
+                                                    : 0.0)
+                                            .animate(
+                                          CurvedAnimation(
+                                            parent: _animationController,
+                                            curve: const Interval(0, 0.4,
+                                                curve: Curves.easeInOut),
+                                          ),
+                                        ),
+                                        child: DragWidget(
+                                          house: snapshot.data![index],
+                                          index: index,
+                                          swipeNotifier: swipeNotifier,
+                                          isLastCard: true,
                                         ),
                                       ),
-                                      child: DragWidget(
-                                        house: snapshot.data![index],
-                                        index: index,
-                                        swipeNotifier: swipeNotifier,
-                                        isLastCard: true,
-                                      ),
-                                    ),
-                                  );
-                                } else {
-                                  return DragWidget(
-                                    house: snapshot.data![index],
-                                    index: index,
-                                    swipeNotifier: swipeNotifier,
-                                  );
-                                }
-                              }),
+                                    );
+                                  } else {
+                                    return DragWidget(
+                                      house: snapshot.data![index],
+                                      index: index,
+                                      swipeNotifier: swipeNotifier,
+                                    );
+                                  }
+                                }),
+                              ),
                             ),
                           ),
                         ),
                         Positioned(
-                          bottom: 0,
+                          bottom: 30,
                           left: 0,
                           right: 0,
                           child: Padding(
@@ -196,6 +229,9 @@ class _FetchAppState extends State<FetchApp>
                                     swipeNotifier.value = Swipe.right;
                                     _animationController.forward().then(
                                       (value) {
+                                        appData.favotitter.add(snapshot.data!.last);
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackBar);
                                         snapshot.data!.removeLast();
                                       },
                                     );
@@ -250,6 +286,11 @@ class _FetchAppState extends State<FetchApp>
                             },
                             onAccept: (int index) {
                               setState(() {
+                                //var caseUrl = snapshot.data!.last.caseUrl;
+                                //_launchURL(caseUrl);
+                                appData.favotitter.add(snapshot.data!.last);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                                 snapshot.data!.removeAt(index);
                               });
                             },

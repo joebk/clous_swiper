@@ -1,8 +1,11 @@
+import 'package:dating_app/model/house.dart';
+
 class AppData {
   static final _appData = AppData._internal();
   
-  bool test = false;
+  bool cardOpen = false;
   String text = '2000';
+  List<House> favotitter = [];
 
   factory AppData() {
     return _appData;
