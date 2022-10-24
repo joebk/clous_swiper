@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Postnumre {
   final int nr;
 

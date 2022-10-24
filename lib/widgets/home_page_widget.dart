@@ -19,7 +19,7 @@ List<Widget> _widgetOptions = <Widget>[
       FetchApp(),
     ],
   ),
-  const FavoritPage()
+  FavoritPage()
   ];
 
 class HomePage extends StatefulWidget {
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const GButton(
                     icon: Icons.favorite_border,
-                    text: 'Likes',
+                    text: 'Favoritter',
                     gap: 8,
                   ),
                 ],

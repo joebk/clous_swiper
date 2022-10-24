@@ -12,8 +12,6 @@ const secondColor = Color(0xFF2929CC);
 const thirdColor = Color(0xFF6677CC);
 const fourthColor = Color(0xFFDADAE6);
 
-
-
 dynamic list = <String>['One', 'Two', 'Three', 'Four'];
 
 Future<Postnumre> fetchPostnumre() async {
@@ -31,7 +29,6 @@ Future<Postnumre> fetchPostnumre() async {
     throw Exception('Failed to load album');
   }
 }
-
 
 class BackgroundCurveWidget extends StatefulWidget {
   const BackgroundCurveWidget({Key? key}) : super(key: key);
@@ -84,7 +81,7 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                           fontSize: 24,
                           color: Colors.white)),
                   const SizedBox(height: 30),
-    
+
                   // Titel Input postnummer
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -97,8 +94,8 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                                 fontSize: 14,
                                 color: Colors.white))),
                   ),
-    
-                  //Dropdown 
+
+                  //Dropdown
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: Container(
@@ -110,16 +107,15 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: DropdownButtonFormField(
                           dropdownColor: Colors.white,
-                          borderRadius: BorderRadius.circular(30),                     
+                          borderRadius: BorderRadius.circular(30),
                           value: appData.text,
                           style: const TextStyle(
                               color: mainColor, fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            iconColor: mainColor,
-                            focusColor: mainColor,
-                            hoverColor: mainColor
-                          ),
+                              border: InputBorder.none,
+                              iconColor: mainColor,
+                              focusColor: mainColor,
+                              hoverColor: mainColor),
                           // Down Arrow Icon
                           icon: const Icon(Icons.keyboard_arrow_down),
                           // Array list of items
@@ -141,10 +137,7 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                       ),
                     ),
                   ),
-    
                   // Next Filter
-    
-    
                 ],
               ))),
             );

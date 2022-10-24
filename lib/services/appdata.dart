@@ -6,6 +6,7 @@ class AppData {
   bool cardOpen = false;
   String text = '2000';
   List<House> favotitter = [];
+  List<String> favotitterState = [];
 
   factory AppData() {
     return _appData;

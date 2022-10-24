@@ -115,14 +115,19 @@ class _FetchAppState extends State<FetchApp>
                       bottomLeft: Radius.circular(40.0),
                       bottomRight: Radius.circular(40.0),
                     )),
-                child: const SafeArea(
-                  child: Padding(
-                      padding: EdgeInsets.only(left: 25),
-                      child: Text('Vælg nye filtre',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.white))),
+                child: GestureDetector(
+                  onTap: () {
+                    print("tapped");
+                  },
+                  child: const SafeArea(
+                    child: Padding(
+                        padding: EdgeInsets.only(left: 25),
+                        child: Text('Vælg nye filtre',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white))),
+                  ),
                 ),
               ),
               // Titel Input postnummer
@@ -229,7 +234,12 @@ class _FetchAppState extends State<FetchApp>
                                     swipeNotifier.value = Swipe.right;
                                     _animationController.forward().then(
                                       (value) {
-                                        appData.favotitter.add(snapshot.data!.last);
+                                        if (appData.favotitterState.contains(
+                                                snapshot.data!.last.name) ==
+                                            false) {
+                                          appData.favotitter
+                                              .add(snapshot.data!.last);
+                                        }
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(snackBar);
                                         snapshot.data!.removeLast();
@@ -288,10 +298,14 @@ class _FetchAppState extends State<FetchApp>
                               setState(() {
                                 //var caseUrl = snapshot.data!.last.caseUrl;
                                 //_launchURL(caseUrl);
-                                appData.favotitter.add(snapshot.data!.last);
+                                if (appData.favotitterState
+                                        .contains(snapshot.data!.last.name) ==
+                                    false) {
+                                  appData.favotitter.add(snapshot.data!.last);
+                                }
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
-                                snapshot.data!.removeAt(index);
+                                snapshot.data!.removeLast();
                               });
                             },
                           ),
@@ -312,7 +326,7 @@ class _FetchAppState extends State<FetchApp>
                     bottomLeft: Radius.circular(40.0),
                     bottomRight: Radius.circular(40.0),
                   )),
-              child: const SafeArea(
+              child: SafeArea(
                 child: Padding(
                     padding: EdgeInsets.only(top: 25, left: 25),
                     child: Text('Vælg nye filtre',
