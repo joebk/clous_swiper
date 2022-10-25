@@ -108,7 +108,7 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                         child: DropdownButtonFormField(
                           dropdownColor: Colors.white,
                           borderRadius: BorderRadius.circular(30),
-                          value: appData.text,
+                          value: appData.postnr,
                           style: const TextStyle(
                               color: mainColor, fontWeight: FontWeight.bold),
                           decoration: const InputDecoration(
@@ -130,12 +130,33 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                           onChanged: (String? newValue) {
                             setState(() {
                               dropdownvalue = newValue!;
-                              appData.text = dropdownvalue.toString();
+                              appData.postnr = dropdownvalue.toString();
                             });
                           },
                         ),
                       ),
                     ),
+                  ),
+                  ElevatedButton(
+                    child: const Text(
+                      "Opdater filtre",
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: mainColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                    ),
+                    onPressed: () {
+                      print(appData.filters);
+                      setState(() {
+                        print(appData.postnr);
+                        appData.filters = appData.postnr;
+                      });
+                      print(appData.filters);
+                    },
                   ),
                   // Next Filter
                 ],

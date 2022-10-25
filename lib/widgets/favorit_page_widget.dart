@@ -32,7 +32,7 @@ class _FavoritPageState extends State<FavoritPage> {
   double pageIndex = 0;
 
   @override
-  var favoritData = appData.favotitter;
+  var favoritData = appData.favoritter;
   Widget build(BuildContext context) {
     //return clipRrect with images
 
@@ -447,7 +447,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                             child: GestureDetector(
                                                 onTap: () {
                                                   setState(() {
-                                                    appData.favotitter
+                                                    appData.favoritter
                                                         .removeAt(index);
                                                   });
                                                 },

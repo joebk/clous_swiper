@@ -8,7 +8,7 @@ class House {
   String caseUrl;
   List images;
   int amountImages;
-  //int monthlyExpense;
+  int monthlyExpense;
   //String description;
   ////String descriptionTitel;
   ////String nextOpenHouse;
@@ -31,7 +31,7 @@ class House {
         required this.amountImages,
         //required this.description,
         ////required this.descriptionTitel,
-        //required this.monthlyExpense,
+        required this.monthlyExpense,
         ////required this.nextOpenHouse,
         //required this.priceChangePercentage,
         ////required this.downPayment,
@@ -60,7 +60,7 @@ class House {
         images: imagesList,
         //description: json["descriptionBody"],
         //descriptionTitel: descriptionTitelPrep,
-        //monthlyExpense: json["monthlyExpense"],
+        monthlyExpense: json["monthlyExpense"],
         //nextOpenHouse: nextOpenHousePrep,
         //priceChangePercentage: json["priceChangePercentage"],
         //downPayment: downPaymentPrep,

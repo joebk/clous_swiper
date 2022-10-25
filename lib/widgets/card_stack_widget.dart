@@ -54,12 +54,12 @@ Future<List<House>> fetchHouses() async {
     "sec-fetch-site": "cross-site",
     "Accept": "application/json"
   };
-  var url = appData.text;
-  var response = await http.get(
+  var postnr = appData.filters;
+  var response = await http.get( 
       Uri.parse(
-          "https://api.prod.bs-aws-stage.com/search/cases?zipCodes=${url}&addressTypes=villa%2Ccondo%2Cterraced+house%2Choliday+house%2Ccooperative%2Cfarm%2Chobby+farm%2Cfull+year+plot%2Cvilla+apartment%2Choliday+plot&per_page=50&page=1&sortAscending=true&sortBy=timeOnMarket"),
+          "https://api.prod.bs-aws-stage.com/search/cases?zipCodes=${postnr}&addressTypes=villa%2Ccondo%2Cterraced+house%2Choliday+house%2Ccooperative%2Cfarm%2Chobby+farm%2Cfull+year+plot%2Cvilla+apartment%2Choliday+plot&per_page=50&page=1&sortAscending=true&sortBy=timeOnMarket"),
       headers: headers);
-
+  
   return (json.decode(response.body)['cases'] as List)
       .map((e) => House.fromJson(e))
       .toList();
@@ -84,7 +84,16 @@ class _FetchAppState extends State<FetchApp>
   @override
   void initState() {
     super.initState();
-    futureHouse = fetchHouses();
+    // check postnr if that is equal with old filters then don't do anything else new
+    if (appData.oldFilters == appData.filters) {
+      print("same - dont do anything");
+      futureHouse = appData.futureHousetest;
+    } else {
+      appData.oldFilters = appData.filters;
+      print("new request");
+      futureHouse = fetchHouses();
+      appData.futureHousetest = futureHouse;
+    }
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
@@ -234,10 +243,12 @@ class _FetchAppState extends State<FetchApp>
                                     swipeNotifier.value = Swipe.right;
                                     _animationController.forward().then(
                                       (value) {
-                                        if (appData.favotitterState.contains(
+                                        if (appData.favoritterState.contains(
                                                 snapshot.data!.last.name) ==
                                             false) {
-                                          appData.favotitter
+                                          appData.favoritterState
+                                              .add(snapshot.data!.last.name);
+                                          appData.favoritter
                                               .add(snapshot.data!.last);
                                         }
                                         ScaffoldMessenger.of(context)
@@ -298,10 +309,13 @@ class _FetchAppState extends State<FetchApp>
                               setState(() {
                                 //var caseUrl = snapshot.data!.last.caseUrl;
                                 //_launchURL(caseUrl);
-                                if (appData.favotitterState
+
+                                if (appData.favoritterState
                                         .contains(snapshot.data!.last.name) ==
                                     false) {
-                                  appData.favotitter.add(snapshot.data!.last);
+                                  appData.favoritterState
+                                      .add(snapshot.data!.last.name);
+                                  appData.favoritter.add(snapshot.data!.last);
                                 }
                                 ScaffoldMessenger.of(context)
                                     .showSnackBar(snackBar);
