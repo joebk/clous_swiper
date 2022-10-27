@@ -68,7 +68,8 @@ Future<List<House>> fetchHouses() async {
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
 class FetchApp extends StatefulWidget {
-  const FetchApp({Key? key}) : super(key: key);
+  const FetchApp({Key? key, required this.pageController}) : super(key: key);
+  final PageController pageController;
 
   @override
   State<FetchApp> createState() => _FetchAppState();
@@ -86,11 +87,9 @@ class _FetchAppState extends State<FetchApp>
     super.initState();
     // check postnr if that is equal with old filters then don't do anything else new
     if (appData.oldFilters == appData.filters) {
-      print("same - dont do anything");
       futureHouse = appData.futureHousetest;
     } else {
       appData.oldFilters = appData.filters;
-      print("new request");
       futureHouse = fetchHouses();
       appData.futureHousetest = futureHouse;
     }
@@ -107,8 +106,10 @@ class _FetchAppState extends State<FetchApp>
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
     return FutureBuilder<List<House>>(
       future: futureHouse,
       builder: (context, snapshot) {
@@ -126,7 +127,7 @@ class _FetchAppState extends State<FetchApp>
                     )),
                 child: GestureDetector(
                   onTap: () {
-                    print("tapped");
+                    widget.pageController.animateToPage(0, duration: const Duration(milliseconds: 1000), curve: Curves.easeOut);
                   },
                   child: const SafeArea(
                     child: Padding(
@@ -277,7 +278,7 @@ class _FetchAppState extends State<FetchApp>
                               return IgnorePointer(
                                 child: Container(
                                   height: 2000,
-                                  width: 80.0,
+                                  width: screenWidth/3.25,
                                   color: Colors.transparent,
                                 ),
                               );
@@ -300,7 +301,7 @@ class _FetchAppState extends State<FetchApp>
                               return IgnorePointer(
                                 child: Container(
                                   height: 2000.0,
-                                  width: 80.0,
+                                  width: screenWidth/4,
                                   color: Colors.transparent,
                                 ),
                               );
@@ -340,7 +341,7 @@ class _FetchAppState extends State<FetchApp>
                     bottomLeft: Radius.circular(40.0),
                     bottomRight: Radius.circular(40.0),
                   )),
-              child: SafeArea(
+              child: const SafeArea(
                 child: Padding(
                     padding: EdgeInsets.only(top: 25, left: 25),
                     child: Text('Vælg nye filtre',

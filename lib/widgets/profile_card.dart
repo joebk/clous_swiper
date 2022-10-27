@@ -28,7 +28,6 @@ class _HouseCardState extends State<HouseCard> {
   double pageIndex = 0;
 
   @override
-  
   Widget build(BuildContext context) {
     final images = <Widget>[];
     List imageList = widget.house.images;
@@ -46,109 +45,278 @@ class _HouseCardState extends State<HouseCard> {
     }
 
     var screenHeight = MediaQuery.of(context).size.height;
-    return Container(
-      height: 580,
-      width: 340,
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            bottom: 50,
-            child: InkWell(
-              // ON TAP
+    var screenWidth = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet<void>(
+          isScrollControlled: true,
+          context: context,
+          backgroundColor: Colors.transparent,
+          builder: (BuildContext context) {
+            // MODAL
+            return GestureDetector(
               onTap: () {
-                showModalBottomSheet<void>(
-                  isScrollControlled: true,
-                  context: context,
-                  backgroundColor: Colors.transparent,
-                  builder: (BuildContext context) {
-                    // MODAL
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        height: screenHeight * 0.7,
-                        color: Colors.transparent,
-                        child: Container(
-                          decoration: const BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0))),
-                          child: Column(
-                            children: [
-                              Center(
-                                child: Column(
-                                  children: [
-                                    // ignore: prefer_const_constructors
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Padding(
-                                        padding: EdgeInsets.only(right: 15),
-                                        child: Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor: Colors.white,
-                                            child: Icon(
-                                              Icons.close,
-                                              color: mainColor,
-                                              size: 14,
-                                              semanticLabel: 'Luk',
-                                              
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 0, left: 10, right: 10),
-                                      child: Container(
-                                        height: 350,
-                                        width: double.infinity,
-                                        child: PageView(
-                                          children: images,
-                                          onPageChanged: (index) {
-                                            setState(() {
-                                              pageIndex = index.toDouble();
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    DotsIndicator(
-                                      dotsCount: widget.house.amountImages,
-                                      position: pageIndex,
-                                    ),
-                                    SizedBox(height: 20,),
-                                    ElevatedButton(
-                                      child: Text("Se hos mælger", style: TextStyle(fontSize: 14, color: mainColor, fontWeight: FontWeight.bold),),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.white,
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                      ),
-                                      onPressed:() {
-                                        var url = widget.house.caseUrl;
-                                        _launchURL(url);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: screenHeight * 0.90,
+                color: Colors.transparent,
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0))),
+                  child: ListView(
+                    children: [
+                      // ignore: prefer_const_constructors
+                      SizedBox(height: 25),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: 0, left: 10, right: 10),
+                        child: SizedBox(
+                          height: 225,
+                          width: double.infinity,
+                          child: PageView(
+                            children: images,
+                            onPageChanged: (value) {
+                              setState(() {
+                                pageIndex = value.toDouble();
+                              });
+                            },
                           ),
                         ),
                       ),
-                    );
-                    //Modal end
-                  },
-                );
-              },
-              //image cliprrect
+                      DotsIndicator(
+                        dotsCount: widget.house.amountImages,
+                        position: pageIndex,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Container(
+                          child: Text(
+                            widget.house.name,
+                            style: const TextStyle(
+                              fontFamily: 'Nunito',
+                              fontWeight: FontWeight.w800,
+                              fontSize: 21,
+                              color: mainColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // ROW 1
+                          Container(
+                            width: screenWidth / 2.25,
+                            color: Colors.transparent,
+                            child: Column(
+                              children: [
+                                // Pris
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${priceFormat.format(int.parse(widget.house.pris.toString()))} kr',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.perAreaPrice.toString()} kr/m2',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.monthlyExpense.toString()} kr/md',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.priceChangePercentage.toString()} % Prisudvikling',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          //ROW 2
+                          Container(
+                            width: screenWidth / 2.25,
+                            color: Colors.transparent,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.daysOnMarket.toString()} dage - liggetid',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.m2.toString()} m2',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      '${widget.house.numberOfRooms.toString()} værelser',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6),
+                                  child: Container(
+                                    width: double.infinity,
+                                    child: Text(
+                                      'Opført ${widget.house.yearBuilt.toString()}',
+                                      style: const TextStyle(
+                                        fontFamily: 'Nunito',
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 12,
+                                        color: mainColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                //Opført
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 15, left: 30, right: 30, bottom: 5),
+                        child: ElevatedButton(
+                          child: const Text(
+                            "Se hos mælger",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: mainColor,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                          ),
+                          onPressed: () {
+                            var url = widget.house.caseUrl;
+                            _launchURL(url);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 80),
+                        child: ElevatedButton(
+                          child: const Text(
+                            "Luk",
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: mainColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.grey.shade100,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                      // Kort
+
+                      // Section WITH Description
+
+                      // Tidligere salgspriser
+
+                      // Markedet i Frederiksberg Kommune
+
+                      // Images End
+                    ],
+                  ),
+                ),
+              ),
+            );
+            //Modal end
+          },
+        );
+      },
+      child: Container(
+        height: 580,
+        width: 340,
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Stack(
+          children: [
+            Positioned.fill(
+              bottom: 50,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
@@ -157,81 +325,81 @@ class _HouseCardState extends State<HouseCard> {
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 50,
-            child: Container(
-              height: 200,
-              width: 340,
-              decoration: ShapeDecoration(
-                color: mainColor.withOpacity(0.70),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                shadows: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.05),
-                    blurRadius: 8,
+            Positioned(
+              bottom: 50,
+              child: Container(
+                height: 200,
+                width: 340,
+                decoration: ShapeDecoration(
+                  color: mainColor.withOpacity(0.70),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      widget.house.name.toString(),
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 21,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text(
-                      '${priceFormat.format(int.parse(widget.house.pris.toString()))}DKK',
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      '${widget.house.m2.toString()} m2',
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      '${widget.house.daysOnMarket.toString()} dage - liggetid',
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    Text(
-                      '${widget.house.numberOfRooms.toString()} rum',
-                      style: const TextStyle(
-                        fontFamily: 'Nunito',
-                        fontWeight: FontWeight.w800,
-                        fontSize: 14,
-                        color: Colors.grey,
-                      ),
+                  shadows: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.05),
+                      blurRadius: 8,
                     ),
                   ],
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.house.name.toString(),
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 21,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        '${priceFormat.format(int.parse(widget.house.pris.toString()))}DKK',
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 16,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        '${widget.house.m2.toString()} m2',
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        '${widget.house.daysOnMarket.toString()} dage - liggetid',
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      Text(
+                        '${widget.house.numberOfRooms.toString()} rum',
+                        style: const TextStyle(
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.w800,
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

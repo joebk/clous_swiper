@@ -31,7 +31,8 @@ Future<Postnumre> fetchPostnumre() async {
 }
 
 class BackgroundCurveWidget extends StatefulWidget {
-  const BackgroundCurveWidget({Key? key}) : super(key: key);
+  const BackgroundCurveWidget({Key? key, required this.pageController}) : super(key: key);
+  final PageController pageController;
 
   @override
   State<BackgroundCurveWidget> createState() => _BackgroundCurveWidgetState();
@@ -150,12 +151,10 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                     ),
                     onPressed: () {
-                      print(appData.filters);
                       setState(() {
-                        print(appData.postnr);
                         appData.filters = appData.postnr;
+                        widget.pageController.animateToPage(1, duration: Duration(milliseconds: 1000), curve: Curves.easeOut);
                       });
-                      print(appData.filters);
                     },
                   ),
                   // Next Filter
@@ -171,3 +170,5 @@ class _BackgroundCurveWidgetState extends State<BackgroundCurveWidget> {
     );
   }
 }
+
+

@@ -1,3 +1,5 @@
+// ignore: non_constant_identifier_names
+
 class House {
   int pris;
   int m2;
@@ -8,17 +10,17 @@ class House {
   String caseUrl;
   List images;
   int amountImages;
-  int monthlyExpense;
-  //String description;
-  ////String descriptionTitel;
-  ////String nextOpenHouse;
-  //int priceChangePercentage;
-  ////int downPayment;
-  //int yearBuilt;
-  //int perAreaPrice;
-  //double coordinatesLat;
-  //double coordinatesLon;
-  
+  int? monthlyExpense;
+  String? description;
+  String? descriptionTitel;
+  String? nextOpenHouse;
+  double? priceChangePercentage;
+  int? downPayment;
+  int? yearBuilt;
+  int? perAreaPrice;
+  String? coordinatesLat;
+  String? coordinatesLon;
+
   House({
         required this.pris,
         required this.name,
@@ -29,16 +31,16 @@ class House {
         required this.caseUrl,
         required this.images,
         required this.amountImages,
-        //required this.description,
-        ////required this.descriptionTitel,
-        required this.monthlyExpense,
-        ////required this.nextOpenHouse,
-        //required this.priceChangePercentage,
-        ////required this.downPayment,
-        //required this.yearBuilt,
-        //required this.perAreaPrice,
-        //required this.coordinatesLat,
-        //required this.coordinatesLon,
+        this.description,
+        this.descriptionTitel,
+        this.monthlyExpense,
+        this.nextOpenHouse,
+        this.priceChangePercentage,
+        this.downPayment,
+        this.yearBuilt,
+        this.perAreaPrice,
+        this.coordinatesLat,
+        this.coordinatesLon,
       });
 
   factory House.fromJson(Map<String, dynamic> json) {
@@ -47,6 +49,37 @@ class House {
     for (var i = 0; i < lengthTest; i++) {
         imagesList.add(json["images"][i]["imageSources"].last['url']);
     }
+
+    int? downPayment;
+    if (json.containsKey('realEstate') == true) {
+      if (json.containsKey('downPayment') == true) {
+        downPayment = json["realEstate"]["downPayment"];
+      } else {
+        downPayment = 0;
+      }
+    } else {
+      downPayment = 0;
+    }
+    
+
+    String? nextOpenHouse;
+    if (json.containsKey('nextOpenHouse') == true) {
+      if (nextOpenHouse.runtimeType == String) {
+        nextOpenHouse = json["nextOpenHouse"];
+      } else {
+        nextOpenHouse = 'Ukendt';
+      }
+    } else {
+      nextOpenHouse = 'Ukendt';
+    }
+
+    double? priceChangePercentage;
+    if (json.containsKey('priceChangePercentage') == true) {
+      priceChangePercentage = json["priceChangePercentage"].toDouble();
+    } else {
+      priceChangePercentage = 0;
+    }
+
 
     return House(
         pris: json["priceCash"],
@@ -58,18 +91,17 @@ class House {
         caseUrl: json["caseUrl"],
         amountImages: json["images"].length,
         images: imagesList,
-        //description: json["descriptionBody"],
-        //descriptionTitel: descriptionTitelPrep,
+        description: json["descriptionBody"],
+        descriptionTitel: json["descriptionTitle"],
         monthlyExpense: json["monthlyExpense"],
-        //nextOpenHouse: nextOpenHousePrep,
-        //priceChangePercentage: json["priceChangePercentage"],
-        //downPayment: downPaymentPrep,
-        //yearBuilt: json["yearBuilt"],
-        //perAreaPrice: json["perAreaPrice"],
-        //coordinatesLat: json["address"]["coordinates"]["lat"],
+        nextOpenHouse: nextOpenHouse,
+        priceChangePercentage: priceChangePercentage,
+        downPayment: downPayment,
+        yearBuilt: json["yearBuilt"],
+        perAreaPrice: json["perAreaPrice"],
+        //coordinatesLat: coordinatesLat,
         //coordinatesLon: json["address"]["coordinates"]["lon"]
       );
   }
 }
-
 

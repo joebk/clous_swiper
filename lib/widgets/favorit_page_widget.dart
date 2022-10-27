@@ -1,6 +1,8 @@
+import 'package:dating_app/main.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/services/appdata.dart';
+import 'package:dating_app/widgets/modal_widget.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +24,8 @@ _launchURL(url) async {
 }
 
 class FavoritPage extends StatefulWidget {
-  const FavoritPage({Key? key}) : super(key: key);
+  const FavoritPage({Key? key, required this.pageController}) : super(key: key);
+  final PageController pageController;
 
   @override
   State<FavoritPage> createState() => _FavoritPageState();
@@ -51,14 +54,21 @@ class _FavoritPageState extends State<FavoritPage> {
                   bottomLeft: Radius.circular(40.0),
                   bottomRight: Radius.circular(40.0),
                 )),
-            child: const SafeArea(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 25),
-                  child: Text('Favoritter',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white))),
+            child: GestureDetector(
+              onTap: () {
+                widget.pageController.animateToPage(1,
+                    duration: const Duration(milliseconds: 1000),
+                    curve: Curves.easeOut);
+              },
+              child: const SafeArea(
+                child: Padding(
+                    padding: EdgeInsets.only(left: 25),
+                    child: Text('Favoritter',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white))),
+              ),
             ),
           ),
           //Modal
@@ -87,434 +97,597 @@ class _FavoritPageState extends State<FavoritPage> {
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet<void>(
-                          isScrollControlled: true,
-                          context: context,
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) {
-                            // MODAL
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Container(
-                                height: screenHeight * 0.85,
-                                color: Colors.transparent,
+                        onTap: () {
+                          showModalBottomSheet<void>(
+                            isScrollControlled: true,
+                            context: context,
+                            backgroundColor: Colors.transparent,
+                            builder: (BuildContext context) {
+                              // MODAL
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
                                 child: Container(
-                                  decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(30.0),
-                                          topRight: Radius.circular(30.0))),
-                                  child: ListView(
-                                    children: [
-                                      // ignore: prefer_const_constructors
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: Padding(
+                                  height: screenHeight * 0.90,
+                                  color: Colors.transparent,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(30.0),
+                                            topRight: Radius.circular(30.0))),
+                                    child: ListView(
+                                      children: [
+                                        // ignore: prefer_const_constructors
+                                        SizedBox(height: 25),
+                                        Padding(
                                           padding: const EdgeInsets.only(
-                                              top: 10, bottom: 5),
+                                              top: 0, left: 10, right: 10),
+                                          child: SizedBox(
+                                            height: 225,
+                                            width: double.infinity,
+                                            child: PageView(
+                                              children: images,
+                                              onPageChanged: (value) {
+                                                setState(() {
+                                                  pageIndex = value.toDouble();
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                        DotsIndicator(
+                                          dotsCount:
+                                              favoritData[index].amountImages,
+                                          position: pageIndex,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(15),
                                           child: Container(
-                                            color: Colors.transparent,
-                                            child: const Padding(
-                                              padding:
-                                                  EdgeInsets.only(right: 10),
-                                              child: Align(
-                                                alignment:
-                                                    Alignment.bottomRight,
-                                                child: CircleAvatar(
-                                                  radius: 16,
-                                                  backgroundColor: mainColor,
-                                                  child: Icon(
-                                                    Icons.close,
-                                                    color: Colors.white,
-                                                    size: 14,
-                                                    semanticLabel: 'Luk',
-                                                  ),
-                                                ),
+                                            child: Text(
+                                              favoritData[index].name,
+                                              style: const TextStyle(
+                                                fontFamily: 'Nunito',
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 21,
+                                                color: mainColor,
                                               ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      //Images
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 0, left: 10, right: 10),
-                                        child: SizedBox(
-                                          height: 250,
-                                          width: double.infinity,
-                                          child: PageView(
-                                            children: images,
-                                            onPageChanged: (value) {
-                                              setState(() {
-                                                pageIndex = value.toDouble();
-                                              });
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            // ROW 1
+                                            Container(
+                                              width: screenWidth / 2.25,
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                children: [
+                                                  // Pris
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${priceFormat.format(int.parse(favoritData[index].pris.toString()))} kr',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].perAreaPrice.toString()} kr/m2',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].monthlyExpense.toString()} kr/md',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].priceChangePercentage.toString()} % Prisudvikling',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            //ROW 2
+                                            Container(
+                                              width: screenWidth / 2.25,
+                                              color: Colors.transparent,
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].daysOnMarket.toString()} dage - liggetid',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].m2.toString()} m2',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        '${favoritData[index].numberOfRooms.toString()} værelser',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            6),
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      child: Text(
+                                                        'Opført ${favoritData[index].yearBuilt.toString()}',
+                                                        style: const TextStyle(
+                                                          fontFamily: 'Nunito',
+                                                          fontWeight:
+                                                              FontWeight.w800,
+                                                          fontSize: 12,
+                                                          color: mainColor,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  //Opført
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 15,
+                                              left: 30,
+                                              right: 30,
+                                              bottom: 5),
+                                          child: ElevatedButton(
+                                            child: const Text(
+                                              "Se hos mælger",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: mainColor,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                            ),
+                                            onPressed: () {
+                                              var url =
+                                                  favoritData[index].caseUrl;
+                                              _launchURL(url);
                                             },
                                           ),
                                         ),
-                                      ),
-                                      DotsIndicator(
-                                        dotsCount:
-                                            favoritData[index].amountImages,
-                                        position: pageIndex,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(15),
-                                        child: Container(
-                                          child: Text(
-                                            favoritData[index].name,
-                                            style: const TextStyle(
-                                              fontFamily: 'Nunito',
-                                              fontWeight: FontWeight.w800,
-                                              fontSize: 21,
-                                              color: mainColor,
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 80),
+                                          child: ElevatedButton(
+                                            child: const Text(
+                                              "Luk",
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: mainColor,
+                                                  fontWeight: FontWeight.bold),
                                             ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  Colors.grey.shade100,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
                                           ),
                                         ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          // ROW 1
-                                          Container(
-                                            width: screenWidth / 2,
-                                            color: Colors.white,
-                                            child: Column(
-                                              children: [
-                                                // Pris
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${priceFormat.format(int.parse(favoritData[index].pris.toString()))} kr',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${favoritData[index].m2.toString()} kr/m2',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${favoritData[index].m2.toString()} kr/md',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${priceFormat.format(int.parse(favoritData[index].m2.toString()))} % Prisudvikling',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          //ROW 2
-                                          Container(
-                                            width: screenWidth / 2,
-                                            color: Colors.white,
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${favoritData[index].daysOnMarket.toString()} dage - liggetid',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${favoritData[index].m2.toString()} m2',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      '${favoritData[index].numberOfRooms.toString()} værelser',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      'Opført ${favoritData[index].m2.toString()}',
-                                                      style: const TextStyle(
-                                                        fontFamily: 'Nunito',
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        fontSize: 12,
-                                                        color: mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                //Opført
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(20),
-                                        child: ElevatedButton(
-                                          child: Text(
-                                            "Se hos mælger",
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: mainColor,
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                          ),
-                                          onPressed: () {
-                                            var url =
-                                                favoritData[index].caseUrl;
-                                            _launchURL(url);
-                                          },
-                                        ),
-                                      ),
-                                      // Kort
+                                        // Kort
 
-                                      // Section WITH Description
+                                        // Section WITH Description
 
-                                      // Tidligere salgspriser
+                                        // Tidligere salgspriser
 
-                                      // Markedet i Frederiksberg Kommune
+                                        // Markedet i Frederiksberg Kommune
 
-                                      // Images End
-                                    ],
+                                        // Images End
+                                      ],
+                                    ),
                                   ),
                                 ),
+                              );
+                              //Modal end
+                            },
+                          );
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: mainColor,
+                                borderRadius: BorderRadius.circular(30),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                      favoritData[index].imageAsset),
+                                  fit: BoxFit.cover,
+                                  colorFilter: ColorFilter.mode(
+                                      Colors.black.withOpacity(0.35),
+                                      BlendMode.dstATop),
+                                )
+                                //color: mainColor,
+                                //borderRadius: BorderRadius.circular(20)
+                                ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Column(
+                                children: [
+                                  Container(
+                                      color: Colors.transparent,
+                                      width: double.infinity,
+                                      child: Text(favoritData[index].name,
+                                          // ignore: prefer_const_constructors
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white))),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Container(
+                                              color: Colors.transparent,
+                                              child: Text(
+                                                  '${priceFormat.format(int.parse(favoritData[index].pris.toString()))} kr',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                      color: Colors.white))),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Container(
+                                              color: Colors.transparent,
+                                              child: Text(
+                                                  '${favoritData[index].m2} m2',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                      color: Colors.white))),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Container(
+                                              color: Colors.transparent,
+                                              child: Text(
+                                                  '${favoritData[index].daysOnMarket} liggetid',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 12,
+                                                      color: Colors.white))),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: Container(
+                                              color: Colors.transparent,
+                                              child: GestureDetector(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      showModalBottomSheet<
+                                                              void>(
+                                                          isScrollControlled:
+                                                              true,
+                                                          context: context,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return Container(
+                                                                height:
+                                                                    screenHeight *
+                                                                        0.25,
+                                                                child:
+                                                                    Container(
+                                                                  decoration: const BoxDecoration(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              30.0),
+                                                                          topRight:
+                                                                              Radius.circular(30.0))),
+                                                                  child: Center(
+                                                                    child:
+                                                                        Column(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets.only(
+                                                                              top: 25,
+                                                                              left: 30),
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                16,
+                                                                            width:
+                                                                                double.infinity,
+                                                                            color:
+                                                                                Colors.transparent,
+                                                                            child:
+                                                                                const Text('Er du helt sikker?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: mainColor)),
+                                                                          ),
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Container(
+                                                                              width: screenWidth / 2,
+                                                                              color: Colors.transparent,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(15),
+                                                                                child: ElevatedButton(
+                                                                                  child: const Text(
+                                                                                    "luk",
+                                                                                    style: TextStyle(fontSize: 14, color: mainColor, fontWeight: FontWeight.bold),
+                                                                                  ),
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    backgroundColor: Colors.grey.shade100,
+                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    Navigator.pop(context);
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                              width: screenWidth / 2,
+                                                                              color: Colors.transparent,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(15),
+                                                                                child: ElevatedButton(
+                                                                                  child: const Text(
+                                                                                    "Slet",
+                                                                                    style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
+                                                                                  ),
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    backgroundColor: mainColor,
+                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
+                                                                                  ),
+                                                                                  onPressed: () {
+                                                                                    Navigator.pop(context);
+                                                                                    setState(() {
+                                                                                      appData.favoritter.removeAt(index);
+                                                                                    });
+                                                                                  },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ));
+                                                          });
+                                                    });
+                                                  },
+                                                  child: const Icon(
+                                                    Icons.close,
+                                                    color: Colors.white,
+                                                  ))),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
-                            );
-                            //Modal end
-                          },
-                        );
-                      },
-                      child: Container(
-                          // ignore: prefer_const_constructors
-                          decoration: BoxDecoration(
-                              color: mainColor,
-                              borderRadius: BorderRadius.circular(20)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              children: [
-                                Container(
-                                    color: Colors.transparent,
-                                    width: double.infinity,
-                                    child: Text(favoritData[index].name,
-                                        // ignore: prefer_const_constructors
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white))),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: Container(
-                                            color: Colors.transparent,
-                                            child: Text(
-                                                '${priceFormat.format(int.parse(favoritData[index].pris.toString()))} kr',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: Colors.grey))),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: Container(
-                                            color: Colors.transparent,
-                                            child: Text(
-                                                '${favoritData[index].m2} m2',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: Colors.grey))),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 8),
-                                        child: Container(
-                                            color: Colors.transparent,
-                                            child: Text(
-                                                '${favoritData[index].daysOnMarket} liggetid',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 12,
-                                                    color: Colors.grey))),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20),
-                                        child: Container(
-                                            color: Colors.transparent,
-                                            child: GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    appData.favoritter
-                                                        .removeAt(index);
-                                                  });
-                                                },
-                                                child: Icon(
-                                                  Icons.close,
-                                                  color: Colors.white,
-                                                ))),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                    ),
+                            ))),
                   );
                 }),
           )
         ],
       );
     } else {
-      return const Text('Ingen favoritter');
+      return const Center(child: Text('Ingen favoritter'));
     }
   }
 }
-
-//https://www.youtube.com/watch?v=k1LxTsmAURU&list=PLlvRDpXh1Se5LTJZDrUF9h1_1AT4Raxjd&index=4
-
-//Padding(
-//                                                          padding:
-//                                                              const EdgeInsets
-//                                                                      .only(
-//                                                                  top: 0,
-//                                                                  left: 10,
-//                                                                  right: 10),
-//                                                          child: Container(
-//                                                            height: 350,
-//                                                            width:
-//                                                                double.infinity,
-//                                                            child: PageView(
-//                                                              children: [
-//                                                                for (int x = 1;
-//                                                                    x <= 5;
-//                                                                    x++) ...[
-//                                                                  Container(
+//setState(() {
+//                                                      showModalBottomSheet<
+//                                                              void>(
+//                                                          isScrollControlled:
+//                                                              true,
+//                                                          context: context,
+//                                                          backgroundColor:
+//                                                              Colors
+//                                                                  .transparent,
+//                                                          builder: (BuildContext
+//                                                              context) {
+//                                                            return Container(
+//                                                                height:
+//                                                                    screenHeight *
+//                                                                        0.2,
+//                                                                child:
+//                                                                    Container(
+//                                                                  decoration: const BoxDecoration(
+//                                                                      color: Colors
+//                                                                          .white,
+//                                                                      borderRadius: BorderRadius.only(
+//                                                                          topLeft: Radius.circular(
+//                                                                              30.0),
+//                                                                          topRight:
+//                                                                              Radius.circular(30.0))),
+//                                                                  child: Center(
 //                                                                    child:
-//                                                                        ClipRRect(
-//                                                                      borderRadius:
-//                                                                          BorderRadius.circular(
-//                                                                              10),
-//                                                                      child: Image
-//                                                                          .network(
-//                                                                        favoritData[index].imageAsset,
-//                                                                        fit: BoxFit
-//                                                                            .fitHeight,
-//                                                                      ),
+//                                                                        Column(
+//                                                                      children: [
+//                                                                        Padding(
+//                                                                          padding: const EdgeInsets.only(top: 25, left: 30),
+//                                                                          child: Container(
+//                                                                            height:
+//                                                                                16,
+//                                                                                width: double.infinity,
+//                                                                            color:
+//                                                                                Colors.transparent,
+//                                                                            child: const Text(
+//                                                                                'Er du helt sikker?',
+//                                                                                style: TextStyle(fontWeight: FontWeight.bold,
+//                                                                                fontSize: 16, color: mainColor)),
+//                                                                          ),
+//                                                                        ),
+//                                                                        Row(
+//                                                                          children: [
+//                                                                            Container(
+//                                                                              width: screenWidth / 2,
+//                                                                              color: Colors.transparent,
+//                                                                              child: Padding(
+//                                                                                padding: const EdgeInsets.all(25),
+//                                                                                child: ElevatedButton(
+//                                                                                  child: const Text(
+//                                                                                    "luk",
+//                                                                                    style: TextStyle(fontSize: 14, color: mainColor, fontWeight: FontWeight.bold),
+//                                                                                  ),
+//                                                                                  style: ElevatedButton.styleFrom(
+//                                                                                    backgroundColor: Colors.grey.shade100,
+//                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
+//                                                                                  ),
+//                                                                                  onPressed: () {
+//                                                                                    Navigator.pop(context);
+//                                                                                  },
+//                                                                                ),
+//                                                                              ),
+//                                                                            ),
+//                                                                            Container(
+//                                                                              width: screenWidth / 2,
+//                                                                              color: Colors.transparent,
+//                                                                              child: Padding(
+//                                                                                padding: const EdgeInsets.all(15),
+//                                                                                child: ElevatedButton(
+//                                                                                  child: const Text(
+//                                                                                    "Slet",
+//                                                                                    style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
+//                                                                                  ),
+//                                                                                  style: ElevatedButton.styleFrom(
+//                                                                                    backgroundColor: mainColor,
+//                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
+//                                                                                  ),
+//                                                                                  onPressed: () {
+//                                                                                    Navigator.pop(context);
+//                                                                                    setState(() {
+//                                                                                      appData.favoritter.removeAt(index);
+//                                                                                    });
+//                                                                                  },
+//                                                                                ),
+//                                                                              ),
+//                                                                            ),
+//                                                                          ],
+//                                                                        ),
+//                                                                      ],
 //                                                                    ),
 //                                                                  ),
-//                                                                ],
-//                                                              ],
-//                                                              onPageChanged:
-//                                                                  (index) {
-//                                                                setState(() {
-//                                                                  pageIndex = index
-//                                                                      .toDouble();
-//                                                                });
-//                                                              },
-//                                                            ),
-//                                                          ),
-//                                                        ),
+//                                                                ));
+//                                                          });
+//                                                    });
