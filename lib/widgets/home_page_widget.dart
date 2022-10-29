@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:dating_app/widgets/background_curve_widget.dart';
 import 'package:dating_app/widgets/card_stack_widget.dart';
 import 'package:dating_app/widgets/favorit_page_widget.dart';
+import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 const mainColor = Color(0xFF141466);
@@ -85,12 +86,12 @@ class _HomePageState extends State<HomePage> {
                 tabs: [
                   const GButton(
                     icon: Icons.filter_alt_outlined,
-                    text: 'Filters',
+                    text: 'Filtre',
                     gap: 8,
                   ),
                   const GButton(
                     icon: Icons.home,
-                    text: 'Hjem',
+                    text: 'Boliger',
                     gap: 8,
                   ),
                   const GButton(
@@ -109,8 +110,11 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: Center(
-          child: buildPageView(),
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: Center(
+            child: buildPageView(),
+          ),
         ));
   }
 }

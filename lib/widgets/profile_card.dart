@@ -59,7 +59,7 @@ class _HouseCardState extends State<HouseCard> {
                 Navigator.pop(context);
               },
               child: Container(
-                height: screenHeight * 0.90,
+                height: screenHeight * 0.80,
                 color: Colors.transparent,
                 child: Container(
                   decoration: const BoxDecoration(
@@ -75,7 +75,7 @@ class _HouseCardState extends State<HouseCard> {
                         padding:
                             const EdgeInsets.only(top: 0, left: 10, right: 10),
                         child: SizedBox(
-                          height: 225,
+                          height: 250,
                           width: double.infinity,
                           child: PageView(
                             children: images,

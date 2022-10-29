@@ -39,6 +39,7 @@ dependencies:
   url_launcher: ^6.0.0-nullsafety
   dots_indicator: ^2.1.0-nullsafety
   google_nav_bar: ^5.0.6
+  currency_text_input_formatter: ^2.1.7
 
 dev_dependencies:
   flutter_test:

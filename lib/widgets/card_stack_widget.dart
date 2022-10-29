@@ -7,16 +7,16 @@ import 'package:dating_app/widgets/action_button_widget.dart';
 import 'package:dating_app/widgets/drag_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dating_app/services/appdata.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart';
 
 const mainColor = Color(0xFF141466);
 const secondColor = Color(0xFF2929CC);
 const thirdColor = Color(0xFF6677CC);
 const fourthColor = Color(0xFFDADAE6);
 
-//  Text('Gemt til favoritter',
-//      style: TextStyle(
-//          fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+final priceFormat = new NumberFormat.currency(locale: "da_DA", symbol: "");
 
 final snackBar = SnackBar(
   content: Row(
@@ -54,10 +54,18 @@ Future<List<House>> fetchHouses() async {
     "sec-fetch-site": "cross-site",
     "Accept": "application/json"
   };
-  var postnr = appData.filters;
+
+
+  var postnr = appData.filters["postnr"];
+  var minPrice = appData.filters["minPrice"];
+  var maxPrice = appData.filters["maxPrice"];
+
+
+
+
   var response = await http.get( 
       Uri.parse(
-          "https://api.prod.bs-aws-stage.com/search/cases?zipCodes=${postnr}&addressTypes=villa%2Ccondo%2Cterraced+house%2Choliday+house%2Ccooperative%2Cfarm%2Chobby+farm%2Cfull+year+plot%2Cvilla+apartment%2Choliday+plot&per_page=50&page=1&sortAscending=true&sortBy=timeOnMarket"),
+          "https://api.prod.bs-aws-stage.com/search/cases?zipCodes=${postnr}&addressTypes=villa%2Ccondo%2Cterraced+house%2Choliday+house%2Ccooperative%2Cfarm%2Chobby+farm%2Cfull+year+plot%2Cvilla+apartment%2Choliday+plot&priceMin=${minPrice}&priceMax=${maxPrice}&per_page=50&page=1&sortAscending=true&sortBy=timeOnMarket"),
       headers: headers);
   
   return (json.decode(response.body)['cases'] as List)
@@ -85,11 +93,12 @@ class _FetchAppState extends State<FetchApp>
   @override
   void initState() {
     super.initState();
-    // check postnr if that is equal with old filters then don't do anything else new
-    if (appData.oldFilters == appData.filters) {
+    if (mapEquals(appData.oldFilters, appData.filters)) {
       futureHouse = appData.futureHousetest;
     } else {
-      appData.oldFilters = appData.filters;
+      appData.oldFilters["minPrice"] = appData.filters["minPrice"];
+      appData.oldFilters["maxPrice"] = appData.filters["maxPrice"];
+      appData.oldFilters["postnr"] = appData.filters["postnr"];
       futureHouse = fetchHouses();
       appData.futureHousetest = futureHouse;
     }
@@ -131,7 +140,7 @@ class _FetchAppState extends State<FetchApp>
                   },
                   child: const SafeArea(
                     child: Padding(
-                        padding: EdgeInsets.only(left: 25),
+                        padding: EdgeInsets.only(left: 25, top: 15),
                         child: Text('Vælg nye filtre',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,

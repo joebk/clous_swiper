@@ -109,7 +109,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                   Navigator.pop(context);
                                 },
                                 child: Container(
-                                  height: screenHeight * 0.90,
+                                  height: screenHeight * 0.80,
                                   color: Colors.transparent,
                                   child: Container(
                                     decoration: const BoxDecoration(
@@ -125,7 +125,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                           padding: const EdgeInsets.only(
                                               top: 0, left: 10, right: 10),
                                           child: SizedBox(
-                                            height: 225,
+                                            height: 250,
                                             width: double.infinity,
                                             child: PageView(
                                               children: images,
@@ -405,7 +405,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                       favoritData[index].imageAsset),
                                   fit: BoxFit.cover,
                                   colorFilter: ColorFilter.mode(
-                                      Colors.black.withOpacity(0.35),
+                                      Colors.black.withOpacity(0.55),
                                       BlendMode.dstATop),
                                 )
                                 //color: mainColor,
@@ -489,7 +489,7 @@ class _FavoritPageState extends State<FavoritPage> {
                                                             return Container(
                                                                 height:
                                                                     screenHeight *
-                                                                        0.25,
+                                                                        0.20,
                                                                 child:
                                                                     Container(
                                                                   decoration: const BoxDecoration(
@@ -595,99 +595,3 @@ class _FavoritPageState extends State<FavoritPage> {
     }
   }
 }
-//setState(() {
-//                                                      showModalBottomSheet<
-//                                                              void>(
-//                                                          isScrollControlled:
-//                                                              true,
-//                                                          context: context,
-//                                                          backgroundColor:
-//                                                              Colors
-//                                                                  .transparent,
-//                                                          builder: (BuildContext
-//                                                              context) {
-//                                                            return Container(
-//                                                                height:
-//                                                                    screenHeight *
-//                                                                        0.2,
-//                                                                child:
-//                                                                    Container(
-//                                                                  decoration: const BoxDecoration(
-//                                                                      color: Colors
-//                                                                          .white,
-//                                                                      borderRadius: BorderRadius.only(
-//                                                                          topLeft: Radius.circular(
-//                                                                              30.0),
-//                                                                          topRight:
-//                                                                              Radius.circular(30.0))),
-//                                                                  child: Center(
-//                                                                    child:
-//                                                                        Column(
-//                                                                      children: [
-//                                                                        Padding(
-//                                                                          padding: const EdgeInsets.only(top: 25, left: 30),
-//                                                                          child: Container(
-//                                                                            height:
-//                                                                                16,
-//                                                                                width: double.infinity,
-//                                                                            color:
-//                                                                                Colors.transparent,
-//                                                                            child: const Text(
-//                                                                                'Er du helt sikker?',
-//                                                                                style: TextStyle(fontWeight: FontWeight.bold,
-//                                                                                fontSize: 16, color: mainColor)),
-//                                                                          ),
-//                                                                        ),
-//                                                                        Row(
-//                                                                          children: [
-//                                                                            Container(
-//                                                                              width: screenWidth / 2,
-//                                                                              color: Colors.transparent,
-//                                                                              child: Padding(
-//                                                                                padding: const EdgeInsets.all(25),
-//                                                                                child: ElevatedButton(
-//                                                                                  child: const Text(
-//                                                                                    "luk",
-//                                                                                    style: TextStyle(fontSize: 14, color: mainColor, fontWeight: FontWeight.bold),
-//                                                                                  ),
-//                                                                                  style: ElevatedButton.styleFrom(
-//                                                                                    backgroundColor: Colors.grey.shade100,
-//                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
-//                                                                                  ),
-//                                                                                  onPressed: () {
-//                                                                                    Navigator.pop(context);
-//                                                                                  },
-//                                                                                ),
-//                                                                              ),
-//                                                                            ),
-//                                                                            Container(
-//                                                                              width: screenWidth / 2,
-//                                                                              color: Colors.transparent,
-//                                                                              child: Padding(
-//                                                                                padding: const EdgeInsets.all(15),
-//                                                                                child: ElevatedButton(
-//                                                                                  child: const Text(
-//                                                                                    "Slet",
-//                                                                                    style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold),
-//                                                                                  ),
-//                                                                                  style: ElevatedButton.styleFrom(
-//                                                                                    backgroundColor: mainColor,
-//                                                                                    padding: const EdgeInsets.symmetric(horizontal: 60),
-//                                                                                  ),
-//                                                                                  onPressed: () {
-//                                                                                    Navigator.pop(context);
-//                                                                                    setState(() {
-//                                                                                      appData.favoritter.removeAt(index);
-//                                                                                    });
-//                                                                                  },
-//                                                                                ),
-//                                                                              ),
-//                                                                            ),
-//                                                                          ],
-//                                                                        ),
-//                                                                      ],
-//                                                                    ),
-//                                                                  ),
-//                                                                ));
-//                                                          });
-//                                                    });

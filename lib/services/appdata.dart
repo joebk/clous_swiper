@@ -5,12 +5,21 @@ class AppData {
   static final _appData = AppData._internal();
   
   bool cardOpen = false;
-  String filters = '2000';
   String postnr = '2000';
-  String oldFilters = '';
+  double minPriceChosen = 0.0;
+  double maxPriceChosen = 9000000.0;
+  Map oldFilters = {};
+  int seqNo = 0;
   List<House> favoritter = [];
   List<String> favoritterState = [];
+  Map filters = {
+    "minPrice": 0.0,
+    "maxPrice": 9000000.0,
+    "postnr": '2000',
+    //"seqNo": 1
+  };
   late Future<List<House>> futureHousetest;
+
   factory AppData() {
     return _appData;
   }
